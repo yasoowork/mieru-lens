@@ -4,6 +4,7 @@ function App() {
   const videoRef = useRef<HTMLVideoElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [strength, setStrength] = useState(50)
+  const strengthRef = useRef(50)
 
   useEffect(() => {
     let animationFrameId: number
@@ -102,7 +103,11 @@ function App() {
           min="0"
           max="100"
           value={strength}
-          onChange={(event) => setStrength(Number(event.target.value))}
+          onChange={(event) => {
+            const value = Number(event.target.value)
+            strengthRef.current = value
+            setStrength(value)
+          }}
           style={{ width: "100%" }}
         />
       </div>
