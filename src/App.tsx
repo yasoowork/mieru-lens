@@ -10,6 +10,9 @@ function App() {
   const [error, setError] = useState<string | null>(null)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
+  type ColorType = "C" | "P" | "D" | "T" | "A"
+  const [colorType, setColorType] = useState<ColorType>("C")
+
   useEffect(() => {
     let stream: MediaStream | null = null
 
@@ -49,6 +52,37 @@ function App() {
 
       return {
         filter: `contrast(${contrast}) brightness(${brightness}) saturate(${saturate})`,
+      }
+    }
+
+    if (mode === "color") {
+      const base = strength / 100
+
+      switch (colorType) {
+        case "C":
+          return {
+            filter: `contrast(${1 + base * 0.25}) saturate(${1 + base * 0.3})`,
+          }
+
+        case "P":
+          return {
+            filter: `contrast(${1 + base * 0.25}) saturate(${1 + base * 0.6}) hue-rotate(-10deg)`,
+          }
+
+        case "D":
+          return {
+            filter: `contrast(${1 + base * 0.25}) saturate(${1 + base * 0.6}) hue-rotate(10deg)`,
+          }
+
+        case "T":
+          return {
+            filter: `contrast(${1 + base * 0.25}) saturate(${1 + base * 0.6}) hue-rotate(25deg)`,
+          }
+
+        case "A":
+          return {
+            filter: `grayscale(1) contrast(${1 + base * 0.5})`,
+          }
       }
     }
 
@@ -199,6 +233,21 @@ function App() {
           value={strength}
           onChange={(event) => setStrength(Number(event.target.value))}
         />
+
+        {mode === "color" && (
+          <div className="colorTabs">
+            {(["C", "P", "D", "T", "A"] as ColorType[]).map((type) => (
+              <button
+                key={type}
+                type="button"
+                className={colorType === type ? "active" : ""}
+                onClick={() => setColorType(type)}
+              >
+                {type}
+              </button>
+            ))}
+          </div>
+        )}
       </section>
     </main>
   )

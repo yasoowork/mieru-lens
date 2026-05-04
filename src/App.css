@@ -269,3 +269,24 @@ input[type="range"] {
 button {
   cursor: pointer;
 }
+
+.colorTabs {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.colorTabs button {
+  height: 36px;
+  border-radius: 999px;
+  border: 1px solid rgb(255 255 255 / 0.14);
+  background: rgb(255 255 255 / 0.08);
+  color: rgb(226 232 240);
+  font-size: 13px;
+}
+
+.colorTabs button.active {
+  background: white;
+  color: #020617;
+}
