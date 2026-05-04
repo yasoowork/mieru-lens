@@ -13,8 +13,8 @@ function App() {
       stream = await navigator.mediaDevices.getUserMedia({
         video: {
           facingMode: { ideal: "environment" },
-          width: { ideal: 1920 },
-          height: { ideal: 1080 },
+          width: { ideal: 1280 },
+          height: { ideal: 720 },
         },
         audio: false,
       })
@@ -45,7 +45,7 @@ function App() {
         context.drawImage(video, 0, 0, width, height)
 
         const imageData = context.getImageData(0, 0, width, height)
-        applyClearFilter(imageData.data, strength)
+        applyClearFilter(imageData.data, strengthRef.current)
         context.putImageData(imageData, 0, 0)
       }
 
@@ -60,7 +60,7 @@ function App() {
       cancelAnimationFrame(animationFrameId)
       stream?.getTracks().forEach((track) => track.stop())
     }
-  }, [strength])
+  }, [])
 
   return (
     <div
