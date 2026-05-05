@@ -71,9 +71,10 @@ void main() {
         0.558, 0.442, 0.000,
         0.000, 0.242, 0.758
       );
-      color = mix(color, applyColorMatrix(color, protan), s);
-      color = adjustContrast(color, 1.0 + s * 0.25);
-      color = adjustSaturation(color, 1.0 + s * 0.15);
+      float intensity = smoothstep(0.0, 1.0, s);
+      color = mix(color, applyColorMatrix(color, protan), intensity);
+      color = adjustContrast(color, 1.0 + intensity * 0.35);
+      color = adjustSaturation(color, 1.0 + intensity * 0.2);
     }
 
     if (u_colorType == 2) {
@@ -149,14 +150,13 @@ export function WebGLCamera({
         onError("WebGLの初期化に失敗しました。")
         return
       }
-
       stream = await navigator.mediaDevices.getUserMedia({
-        video: {
+      video: {
           facingMode: { ideal: "environment" },
-          width: { ideal: 1280 },
-          height: { ideal: 720 },
-        },
-        audio: false,
+          width: { ideal: 1920 },
+          height: { ideal: 1080 },
+      },
+      audio: false,
       })
 
       video.srcObject = stream
@@ -209,7 +209,7 @@ export function WebGLCamera({
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR)
 
       const resize = () => {
-        const dpr = window.devicePixelRatio || 1
+        const dpr = Math.min(window.devicePixelRatio || 1, 2.5)
         const width = Math.floor(window.innerWidth * dpr)
         const height = Math.floor(window.innerHeight * dpr)
 
@@ -251,8 +251,11 @@ export function WebGLCamera({
           )
         }
 
+        const normalized = current.strength / 100
+        const adjusted = Math.pow(normalized, 1.4)
+
         gl.uniform1i(textureLocation, 0)
-        gl.uniform1f(strengthLocation, current.strength / 100)
+        gl.uniform1f(strengthLocation, adjusted)
         gl.uniform1i(modeLocation, current.mode === "clear" ? 0 : 1)
         gl.uniform1i(colorTypeLocation, colorTypeToIndex(current.colorType))
 

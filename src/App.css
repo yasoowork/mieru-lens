@@ -325,3 +325,11 @@ button {
   color: white;
   text-decoration: none;
 }
+
+.colorTypeDescription {
+  margin: 8px 0 0;
+  color: rgb(203 213 225);
+  font-size: 12px;
+  line-height: 1.5;
+  text-align: center;
+}

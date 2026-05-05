@@ -10,6 +10,14 @@ function App() {
   const [error, setError] = useState<string | null>(null)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
+  const colorTypeLabels: Record<ColorType, string> = {
+    C: "通常の色補助",
+    P: "赤系が見分けづらい方向け",
+    D: "緑系が見分けづらい方向け",
+    T: "青系が見分けづらい方向け",
+    A: "色ではなく明暗で見分ける補助",
+  }
+
   return (
     <main className="app">
       <WebGLCamera
@@ -75,6 +83,12 @@ function App() {
           value={strength}
           onChange={(event) => setStrength(Number(event.target.value))}
         />
+
+        {mode === "color" && (
+          <p className="colorTypeDescription">
+            {colorTypeLabels[colorType]}
+          </p>
+        )}
       </section>
 
       {isMenuOpen && (
