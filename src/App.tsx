@@ -1,109 +1,22 @@
-import { useEffect, useMemo, useRef, useState } from "react"
+import { useState } from "react"
 import "./App.css"
-
-type Mode = "clear" | "color"
+import { WebGLCamera } from "./components/WebGLCamera"
+import type { ColorType, ViewMode } from "./components/WebGLCamera"
 
 function App() {
-  const videoRef = useRef<HTMLVideoElement | null>(null)
-  const [mode, setMode] = useState<Mode>("clear")
+  const [mode, setMode] = useState<ViewMode>("clear")
   const [strength, setStrength] = useState(50)
+  const [colorType, setColorType] = useState<ColorType>("C")
   const [error, setError] = useState<string | null>(null)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
-  type ColorType = "C" | "P" | "D" | "T" | "A"
-  const [colorType, setColorType] = useState<ColorType>("C")
-
-  useEffect(() => {
-    let stream: MediaStream | null = null
-
-    const startCamera = async () => {
-      try {
-        stream = await navigator.mediaDevices.getUserMedia({
-          video: {
-            facingMode: { ideal: "environment" },
-            width: { ideal: 1280 },
-            height: { ideal: 720 },
-          },
-          audio: false,
-        })
-
-        if (!videoRef.current) return
-        videoRef.current.srcObject = stream
-        await videoRef.current.play()
-      } catch {
-        setError("カメラを起動できませんでした。ブラウザのカメラ許可を確認してください。")
-      }
-    }
-
-    startCamera()
-
-    return () => {
-      stream?.getTracks().forEach((track) => track.stop())
-    }
-  }, [])
-
-  const filterStyle = useMemo(() => {
-    const amount = strength / 100
-
-    if (mode === "clear") {
-      const contrast = 1 + amount * 0.35
-      const brightness = 1 + amount * 0.08
-      const saturate = 1 + amount * 0.12
-
-      return {
-        filter: `contrast(${contrast}) brightness(${brightness}) saturate(${saturate})`,
-      }
-    }
-
-    if (mode === "color") {
-      const base = strength / 100
-
-      switch (colorType) {
-        case "C":
-          return {
-            filter: `contrast(${1 + base * 0.25}) saturate(${1 + base * 0.3})`,
-          }
-
-        case "P":
-          return {
-            filter: `contrast(${1 + base * 0.25}) saturate(${1 + base * 0.6}) hue-rotate(-10deg)`,
-          }
-
-        case "D":
-          return {
-            filter: `contrast(${1 + base * 0.25}) saturate(${1 + base * 0.6}) hue-rotate(10deg)`,
-          }
-
-        case "T":
-          return {
-            filter: `contrast(${1 + base * 0.25}) saturate(${1 + base * 0.6}) hue-rotate(25deg)`,
-          }
-
-        case "A":
-          return {
-            filter: `grayscale(1) contrast(${1 + base * 0.5})`,
-          }
-      }
-    }
-
-    const contrast = 1 + amount * 0.25
-    const saturate = 1 + amount * 0.45
-    const brightness = 1 + amount * 0.04
-
-    return {
-      filter: `contrast(${contrast}) brightness(${brightness}) saturate(${saturate})`,
-    }
-  }, [mode, strength])
-
   return (
     <main className="app">
-      <video
-        ref={videoRef}
-        className="camera"
-        style={filterStyle}
-        playsInline
-        muted
-        autoPlay
+      <WebGLCamera
+        mode={mode}
+        strength={strength}
+        colorType={colorType}
+        onError={setError}
       />
 
       {error && <div className="error">{error}</div>}
@@ -117,13 +30,63 @@ function App() {
         ☰
       </button>
 
+      <section className="controls" aria-label="補正設定">
+        <div className="modeTabs">
+          <button
+            type="button"
+            className={mode === "clear" ? "active" : ""}
+            onClick={() => setMode("clear")}
+          >
+            くっきり
+          </button>
+          <button
+            type="button"
+            className={mode === "color" ? "active" : ""}
+            onClick={() => setMode("color")}
+          >
+            色
+          </button>
+        </div>
+
+        {mode === "color" && (
+          <div className="colorTabs">
+            {(["C", "P", "D", "T", "A"] as ColorType[]).map((type) => (
+              <button
+                key={type}
+                type="button"
+                className={colorType === type ? "active" : ""}
+                onClick={() => setColorType(type)}
+              >
+                {type}
+              </button>
+            ))}
+          </div>
+        )}
+
+        <label className="sliderLabel">
+          <span>強さ</span>
+          <span>{strength}</span>
+        </label>
+
+        <input
+          type="range"
+          min="0"
+          max="100"
+          value={strength}
+          onChange={(event) => setStrength(Number(event.target.value))}
+        />
+      </section>
+
       {isMenuOpen && (
         <div className="menuOverlay" onClick={() => setIsMenuOpen(false)}>
-          <aside className="menuPanel" onClick={(event) => event.stopPropagation()}>
+          <aside
+            className="menuPanel"
+            onClick={(event) => event.stopPropagation()}
+          >
             <div className="menuHeader">
               <div>
                 <h1>MieruLens</h1>
-                <p>見やすくするための視認補助レンズ</p>
+                <p>カメラ映像を見やすくする視認補助レンズ</p>
               </div>
 
               <button
@@ -140,7 +103,7 @@ function App() {
               <h2>About</h2>
               <p>
                 MieruLensは、スマホのカメラ映像をリアルタイムで補正し、
-                文字・輪郭・色の見やすさを補助するWebアプリです。
+                輪郭や色の見やすさを補助するWebアプリです。
               </p>
             </section>
 
@@ -148,7 +111,6 @@ function App() {
               <h2>使い方</h2>
               <p>
                 くっきりモードまたは色モードを選び、下部スライダーで補正の強さを調整してください。
-                見づらくなった場合は強さを下げてください。
               </p>
             </section>
 
@@ -178,77 +140,46 @@ function App() {
             <section className="menuSection">
               <h2>不具合報告</h2>
               <p>
-                不具合や改善要望は 
-                <a href="https://github.com/yasoowork/mieru-lens/issues" target="_blank" rel="noreferrer">
-                  GitHub Issues
-                </a>      
-                 までご連絡ください。
+                不具合や改善要望は GitHub Issues までご連絡ください。
               </p>
             </section>
 
             <section className="menuSection">
               <h2>Related</h2>
               <div className="linkList">
-                <a href="https://www.amazon.co.jp/?tag=yasoowork-22" target="_blank" rel="noreferrer">
+                <a
+                  href="https://github.com/yasoowork/mieru-lens"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  GitHub
+                </a>
+                <a
+                  href="https://github.com/sponsors/yasoowork"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Sponsors
+                </a>
+                <a
+                  href="https://www.amazon.co.jp/?tag=yasoowork-22"
+                  target="_blank"
+                  rel="noreferrer"
+                >
                   Amazon
                 </a>
               </div>
             </section>
 
             <p className="createdBy">
-              Created by <a href="https://yasoo.work" target="_blank" rel="noreferrer">yasoo.work</a>
+              Created by{" "}
+              <a href="https://yasoo.work" target="_blank" rel="noreferrer">
+                yasoo.work
+              </a>
             </p>
-            
           </aside>
         </div>
       )}
-
-      <section className="controls" aria-label="補正設定">
-        <div className="modeTabs">
-          <button
-            type="button"
-            className={mode === "clear" ? "active" : ""}
-            onClick={() => setMode("clear")}
-          >
-            くっきり
-          </button>
-          <button
-            type="button"
-            className={mode === "color" ? "active" : ""}
-            onClick={() => setMode("color")}
-          >
-            色
-          </button>
-        </div>
-
-        <label className="sliderLabel">
-          <span>強さ</span>
-          <span>{strength}</span>
-        </label>
-
-        <input
-          type="range"
-          min="0"
-          max="100"
-          value={strength}
-          onChange={(event) => setStrength(Number(event.target.value))}
-        />
-
-        {mode === "color" && (
-          <div className="colorTabs">
-            {(["C", "P", "D", "T", "A"] as ColorType[]).map((type) => (
-              <button
-                key={type}
-                type="button"
-                className={colorType === type ? "active" : ""}
-                onClick={() => setColorType(type)}
-              >
-                {type}
-              </button>
-            ))}
-          </div>
-        )}
-      </section>
     </main>
   )
 }
