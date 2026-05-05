@@ -48,6 +48,7 @@ void main() {
   vec4 tex = texture2D(u_texture, v_texCoord);
   vec3 color = tex.rgb;
   float s = u_strength;
+  float intensity = smoothstep(0.0, 1.0, s);
 
   if (u_mode == 0) {
     float contrast = 1.0 + s * 0.45;
