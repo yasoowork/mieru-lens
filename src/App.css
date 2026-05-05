@@ -248,7 +248,8 @@ input[type="range"] {
 }
 
 .createdBy a {
-  text-decoration: none;
+  color: inherit;
+  text-decoration: underline;
 }
 
 button,
@@ -320,11 +321,6 @@ button {
   text-align: center;
   font-size: 12px;
   color: rgb(148 163 184);
-}
-
-.createdBy a {
-  color: white;
-  text-decoration: none;
 }
 
 .colorTypeDescription {
