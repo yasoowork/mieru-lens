@@ -51,9 +51,9 @@ void main() {
   float intensity = smoothstep(0.0, 1.0, s);
 
   if (u_mode == 0) {
-    float contrast = 1.0 + s * 0.45;
-    float saturation = 1.0 + s * 0.12;
-    float brightness = 1.0 + s * 0.06;
+    float contrast = 1.0 + s * 0.6;
+    float saturation = 1.0 + s * 0.2;
+    float brightness = 1.0 + s * 0.08;
 
     color = adjustContrast(color, contrast);
     color = adjustSaturation(color, saturation);
@@ -73,8 +73,8 @@ void main() {
             0.000, 0.242, 0.758
             );
             color = mix(color, applyColorMatrix(color, protan), intensity);
-            color = adjustContrast(color, 1.0 + intensity * 0.35);
-            color = adjustSaturation(color, 1.0 + intensity * 0.2);
+            color = adjustContrast(color, 1.0 + intensity * 0.4);
+            color = adjustSaturation(color, 1.0 + intensity * 0.25);
         }
 
         if (u_colorType == 2) {
