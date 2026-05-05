@@ -282,9 +282,10 @@ export function WebGLCamera({
 
       render()
     }
-
     start().catch(() => {
-      onError("カメラを起動できませんでした。ブラウザのカメラ許可を確認してください。")
+        onError(
+            "カメラを起動できませんでした。\nカメラの利用を許可するか、スマートフォンなどカメラ対応端末でお試しください。"
+        )
     })
 
     return () => {

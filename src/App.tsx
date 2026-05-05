@@ -154,27 +154,39 @@ function App() {
             <section className="menuSection">
               <h2>不具合報告</h2>
               <p>
-                不具合や改善要望は GitHub Issues までご連絡ください。
+                不具合や改善要望は{" "}
+                <a
+                  href="https://github.com/yasoowork/mieru-lens/issues"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  GitHub Issues
+                </a>{" "}
+                までご連絡ください。
               </p>
             </section>
 
             <section className="menuSection">
-              <h2>Related</h2>
-              <div className="linkList">
-                <a
-                  href="https://github.com/yasoowork/mieru-lens"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  GitHub
-                </a>
+              <h2>Support</h2>
+              <p>
+                MieruLensは個人開発で運営しています。
+                改善・機能追加を継続するため、よければGitHub Sponsorsで応援していただけると助かります。
+              </p>
+
+              <div className="linkList supportLinks">
                 <a
                   href="https://github.com/sponsors/yasoowork"
                   target="_blank"
                   rel="noreferrer"
                 >
-                  Sponsors
+                  応援する
                 </a>
+              </div>
+            </section>
+
+            <section className="menuSection">
+              <h2>Related</h2>
+              <div className="linkList">
                 <a
                   href="https://www.amazon.co.jp/?tag=yasoowork-22"
                   target="_blank"
