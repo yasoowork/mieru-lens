@@ -1,11 +1,49 @@
 <!doctype html>
-<html lang="en">
+<html lang="ja">
   <head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-PG29GW8VDN"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag("js", new Date());
+      gtag("config", "G-PG29GW8VDN");
+    </script>
+
+    <!-- Google Adsense -->
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7334427948355935"
+      crossorigin="anonymous"
+    ></script>
+
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mieru-lens</title>
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+
+    <title>MieruLens | 見やすくする視認補助レンズ</title>
+
+    <meta
+      name="description"
+      content="MieruLensは、スマホのカメラ映像をリアルタイムで補正し、輪郭や色の見やすさを補助するWebアプリです。"
+    />
+
+    <meta property="og:title" content="MieruLens" />
+    <meta
+      property="og:description"
+      content="スマホのカメラ映像をリアルタイムで補正し、見やすさを補助するWebアプリ"
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://mierulens.yasoo.work" />
+    <meta property="og:image" content="https://mierulens.yasoo.work/ogp.png" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml" />
   </head>
+
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
