@@ -11,6 +11,7 @@ function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [keepScreenOn, setKeepScreenOn] = useState(false)
   const wakeLockRef = useRef<WakeLockSentinel | null>(null)
+  const [isControlsOpen, setIsControlsOpen] = useState(true)
 
   const colorTypeLabels: Record<ColorType, string> = {
     C: "通常の色補助",
@@ -82,67 +83,86 @@ function App() {
         ☰
       </button>
 
-      <section className="controls" aria-label="補正設定">
-        <div className="modeTabs">
+      {isControlsOpen ? (
+        <section className="controls" aria-label="補正設定">
           <button
+            className="collapseButton"
             type="button"
-            className={mode === "clear" ? "active" : ""}
-            onClick={() => setMode("clear")}
+            onClick={() => setIsControlsOpen(false)}
+            aria-label="補正設定を閉じる"
           >
-            くっきり
+            閉じる
           </button>
-          <button
-            type="button"
-            className={mode === "color" ? "active" : ""}
-            onClick={() => setMode("color")}
-          >
-            色
-          </button>
-        </div>
 
-        {mode === "color" && (
-          <div className="colorTabs">
-            {(["C", "P", "D", "T", "A"] as ColorType[]).map((type) => (
-              <button
-                key={type}
-                type="button"
-                className={colorType === type ? "active" : ""}
-                onClick={() => setColorType(type)}
-              >
-                {type}
-              </button>
-            ))}
+          <div className="modeTabs">
+            <button
+              type="button"
+              className={mode === "clear" ? "active" : ""}
+              onClick={() => setMode("clear")}
+            >
+              くっきり
+            </button>
+            <button
+              type="button"
+              className={mode === "color" ? "active" : ""}
+              onClick={() => setMode("color")}
+            >
+              色
+            </button>
           </div>
-        )}
 
-        <label className="sliderLabel">
-          <span>強さ</span>
-          <span>{strength}</span>
-        </label>
+          {mode === "color" && (
+            <div className="colorTabs">
+              {(["C", "P", "D", "T", "A"] as ColorType[]).map((type) => (
+                <button
+                  key={type}
+                  type="button"
+                  className={colorType === type ? "active" : ""}
+                  onClick={() => setColorType(type)}
+                >
+                  {type}
+                </button>
+              ))}
+            </div>
+          )}
 
-        <input
-          type="range"
-          min="0"
-          max="100"
-          value={strength}
-          onChange={(event) => setStrength(Number(event.target.value))}
-        />
+          <label className="sliderLabel">
+            <span>強さ</span>
+            <span>{strength}</span>
+          </label>
 
-        {mode === "color" && (
-          <p className="colorTypeDescription">
-            {colorTypeLabels[colorType]}
-          </p>
-        )}
-
-        <label className="wakeLockToggle">
           <input
-            type="checkbox"
-            checked={keepScreenOn}
-            onChange={(event) => setKeepScreenOn(event.target.checked)}
+            type="range"
+            min="0"
+            max="100"
+            value={strength}
+            onChange={(event) => setStrength(Number(event.target.value))}
           />
-          <span>画面を点灯したままにする</span>
-        </label>
-      </section>
+
+          {mode === "color" && (
+            <p className="colorTypeDescription">
+              {colorTypeLabels[colorType]}
+            </p>
+          )}
+
+          <label className="wakeLockToggle">
+            <input
+              type="checkbox"
+              checked={keepScreenOn}
+              onChange={(event) => setKeepScreenOn(event.target.checked)}
+            />
+            <span>画面を点灯したままにする</span>
+          </label>
+        </section>
+      ) : (
+        <button
+          className="openControlsButton"
+          type="button"
+          onClick={() => setIsControlsOpen(true)}
+        >
+          調整
+        </button>
+      )}
 
       {isMenuOpen && (
         <div className="menuOverlay" onClick={() => setIsMenuOpen(false)}>
