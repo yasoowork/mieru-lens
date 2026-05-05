@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import "./App.css"
 import { WebGLCamera } from "./components/WebGLCamera"
 import type { ColorType, ViewMode } from "./components/WebGLCamera"
@@ -9,6 +9,8 @@ function App() {
   const [colorType, setColorType] = useState<ColorType>("C")
   const [error, setError] = useState<string | null>(null)
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [keepScreenOn, setKeepScreenOn] = useState(false)
+  const wakeLockRef = useRef<WakeLockSentinel | null>(null)
 
   const colorTypeLabels: Record<ColorType, string> = {
     C: "通常の色補助",
@@ -17,6 +19,48 @@ function App() {
     T: "青系が見分けづらい方向け",
     A: "色ではなく明暗で見分ける補助",
   }
+
+  useEffect(() => {
+    const requestWakeLock = async () => {
+      if (!keepScreenOn) return
+      if (!("wakeLock" in navigator)) return
+
+      try {
+        wakeLockRef.current = await navigator.wakeLock.request("screen")
+      } catch {
+        setKeepScreenOn(false)
+      }
+    }
+
+    const releaseWakeLock = async () => {
+      try {
+        await wakeLockRef.current?.release()
+      } finally {
+        wakeLockRef.current = null
+      }
+    }
+
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "visible") {
+        requestWakeLock()
+      } else {
+        releaseWakeLock()
+      }
+    }
+
+    if (keepScreenOn) {
+      requestWakeLock()
+    } else {
+      releaseWakeLock()
+    }
+
+    document.addEventListener("visibilitychange", handleVisibilityChange)
+
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange)
+      releaseWakeLock()
+    }
+  }, [keepScreenOn])
 
   return (
     <main className="app">
@@ -89,6 +133,15 @@ function App() {
             {colorTypeLabels[colorType]}
           </p>
         )}
+
+        <label className="wakeLockToggle">
+          <input
+            type="checkbox"
+            checked={keepScreenOn}
+            onChange={(event) => setKeepScreenOn(event.target.checked)}
+          />
+          <span>画面を点灯したままにする</span>
+        </label>
       </section>
 
       {isMenuOpen && (

@@ -339,3 +339,16 @@ button {
   background: white;
   color: #020617;
 }
+.wakeLockToggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+  color: rgb(203 213 225);
+  font-size: 12px;
+}
+
+.wakeLockToggle input {
+  width: 16px;
+  height: 16px;
+}
