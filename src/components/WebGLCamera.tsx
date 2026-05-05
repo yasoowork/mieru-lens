@@ -59,52 +59,51 @@ void main() {
     color *= brightness;
   }
 
-  if (u_mode == 1) {
-    if (u_colorType == 0) {
-      color = adjustContrast(color, 1.0 + s * 0.25);
-      color = adjustSaturation(color, 1.0 + s * 0.25);
-    }
+    if (u_mode == 1) {
+        if (u_colorType == 0) {
+            color = adjustContrast(color, 1.0 + intensity * 0.3);
+            color = adjustSaturation(color, 1.0 + intensity * 0.3);
+        }
 
-    if (u_colorType == 1) {
-      mat3 protan = mat3(
-        0.567, 0.433, 0.000,
-        0.558, 0.442, 0.000,
-        0.000, 0.242, 0.758
-      );
-      float intensity = smoothstep(0.0, 1.0, s);
-      color = mix(color, applyColorMatrix(color, protan), intensity);
-      color = adjustContrast(color, 1.0 + intensity * 0.35);
-      color = adjustSaturation(color, 1.0 + intensity * 0.2);
-    }
+        if (u_colorType == 1) {
+            mat3 protan = mat3(
+            0.567, 0.433, 0.000,
+            0.558, 0.442, 0.000,
+            0.000, 0.242, 0.758
+            );
+            color = mix(color, applyColorMatrix(color, protan), intensity);
+            color = adjustContrast(color, 1.0 + intensity * 0.35);
+            color = adjustSaturation(color, 1.0 + intensity * 0.2);
+        }
 
-    if (u_colorType == 2) {
-      mat3 deutan = mat3(
-        0.625, 0.375, 0.000,
-        0.700, 0.300, 0.000,
-        0.000, 0.300, 0.700
-      );
-      color = mix(color, applyColorMatrix(color, deutan), s);
-      color = adjustContrast(color, 1.0 + s * 0.25);
-      color = adjustSaturation(color, 1.0 + s * 0.15);
-    }
+        if (u_colorType == 2) {
+            mat3 deutan = mat3(
+            0.625, 0.375, 0.000,
+            0.700, 0.300, 0.000,
+            0.000, 0.300, 0.700
+            );
+            color = mix(color, applyColorMatrix(color, deutan), intensity);
+            color = adjustContrast(color, 1.0 + intensity * 0.35);
+            color = adjustSaturation(color, 1.0 + intensity * 0.2);
+        }
 
-    if (u_colorType == 3) {
-      mat3 tritan = mat3(
-        0.950, 0.050, 0.000,
-        0.000, 0.433, 0.567,
-        0.000, 0.475, 0.525
-      );
-      color = mix(color, applyColorMatrix(color, tritan), s);
-      color = adjustContrast(color, 1.0 + s * 0.25);
-      color = adjustSaturation(color, 1.0 + s * 0.15);
-    }
+        if (u_colorType == 3) {
+            mat3 tritan = mat3(
+            0.950, 0.050, 0.000,
+            0.000, 0.433, 0.567,
+            0.000, 0.475, 0.525
+            );
+            color = mix(color, applyColorMatrix(color, tritan), intensity);
+            color = adjustContrast(color, 1.0 + intensity * 0.35);
+            color = adjustSaturation(color, 1.0 + intensity * 0.2);
+        }
 
-    if (u_colorType == 4) {
-      float gray = dot(color, vec3(0.299, 0.587, 0.114));
-      color = vec3(gray);
-      color = adjustContrast(color, 1.0 + s * 0.6);
+        if (u_colorType == 4) {
+            float gray = dot(color, vec3(0.299, 0.587, 0.114));
+            color = vec3(gray);
+            color = adjustContrast(color, 1.0 + intensity * 0.7);
+        }
     }
-  }
 
   gl_FragColor = vec4(clamp(color, 0.0, 1.0), tex.a);
 }
