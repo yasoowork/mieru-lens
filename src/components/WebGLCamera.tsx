@@ -168,8 +168,8 @@ export function WebGLCamera({
       stream = await navigator.mediaDevices.getUserMedia({
         video: {
             facingMode: { ideal: "environment" },
-            width: { ideal: 1920, max: 3840 },
-            height: { ideal: 1080, max: 2160 },
+            width: { ideal: 3840},
+            height: { ideal: 2160},
         },
         audio: false,
       })
