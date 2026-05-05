@@ -125,6 +125,21 @@ export function WebGLCamera({
   }, [mode, strength, colorType])
 
   useEffect(() => {
+    const handleVisibilityChange = () => {
+        if (document.visibilityState === "visible") {
+        // ページ復帰時に再読み込み
+        window.location.reload()
+        }
+    }
+
+    document.addEventListener("visibilitychange", handleVisibilityChange)
+
+    return () => {
+        document.removeEventListener("visibilitychange", handleVisibilityChange)
+    }
+  }, [])
+
+  useEffect(() => {
     let stream: MediaStream | null = null
     let animationId = 0
     let disposed = false
@@ -151,12 +166,12 @@ export function WebGLCamera({
         return
       }
       stream = await navigator.mediaDevices.getUserMedia({
-      video: {
-          facingMode: { ideal: "environment" },
-          width: { ideal: 1920 },
-          height: { ideal: 1080 },
-      },
-      audio: false,
+        video: {
+            facingMode: { ideal: "environment" },
+            width: { ideal: 1920, max: 3840 },
+            height: { ideal: 1080, max: 2160 },
+        },
+        audio: false,
       })
 
       video.srcObject = stream
@@ -176,12 +191,12 @@ export function WebGLCamera({
       gl.bufferData(
         gl.ARRAY_BUFFER,
         new Float32Array([
-          -1, -1,
-           1, -1,
-          -1,  1,
-          -1,  1,
-           1, -1,
-           1,  1,
+        0, 0,
+        1, 0,
+        0, 1,
+        0, 1,
+        1, 0,
+        1, 1,
         ]),
         gl.STATIC_DRAW
       )
@@ -207,6 +222,7 @@ export function WebGLCamera({
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE)
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR)
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR)
+      gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true)
 
       const resize = () => {
         const dpr = Math.min(window.devicePixelRatio || 1, 2.5)
