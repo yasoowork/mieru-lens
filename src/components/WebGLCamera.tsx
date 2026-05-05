@@ -225,7 +225,7 @@ export function WebGLCamera({
       gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true)
 
       const resize = () => {
-        const dpr = Math.min(window.devicePixelRatio || 1, 2.5)
+        const dpr = Math.min(window.devicePixelRatio || 1, 2)
         const width = Math.floor(window.innerWidth * dpr)
         const height = Math.floor(window.innerHeight * dpr)
 
