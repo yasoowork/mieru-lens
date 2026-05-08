@@ -211,7 +211,7 @@ function App() {
             <section className="menuSection">
               <h2>広告・アクセス解析</h2>
               <p>
-                Google Analytics、Google AdSense、Amazonアソシエイトを利用しています。
+                Google Analytics、Amazonアソシエイトを利用しています。
               </p>
             </section>
 
