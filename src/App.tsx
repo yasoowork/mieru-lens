@@ -225,15 +225,16 @@ function App() {
             </section>
 
             <section className="menuSection">
-              <h2>不具合報告</h2>
+              <h2>フィードバック</h2>
+
               <p>
-                不具合や改善要望は{" "}
+                不具合報告・改善要望などは{" "}
                 <a
-                  href="https://github.com/yasoowork/mieru-lens/issues"
+                  href="https://feedback.yasoo.work/submit?service=MieruLens"
                   target="_blank"
                   rel="noreferrer"
                 >
-                  GitHub Issues
+                  YW Feedback
                 </a>{" "}
                 までご連絡ください。
               </p>
