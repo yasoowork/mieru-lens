@@ -1,4 +1,67 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-  <circle cx="50" cy="50" r="40" stroke="white" stroke-width="8" fill="none"/>
-  <text x="50" y="60" text-anchor="middle" font-size="40" fill="white" font-family="sans-serif">Y</text>
+<svg
+  width="512"
+  height="512"
+  viewBox="0 0 512 512"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+>
+  <!-- ========================================= -->
+  <!-- Hearth -->
+  <!-- tiny top/bottom gaps -->
+  <!-- ========================================= -->
+
+  <path
+    d="
+      M 266 80
+      A 176 176 0 0 1 432 256
+      A 176 176 0 0 1 266 432
+    "
+    stroke="#E5D8CB"
+    stroke-width="24"
+    stroke-linecap="round"
+    fill="none"
+  />
+
+  <path
+    d="
+      M 246 432
+      A 176 176 0 0 1 80 256
+      A 176 176 0 0 1 246 80
+    "
+    stroke="#E5D8CB"
+    stroke-width="24"
+    stroke-linecap="round"
+    fill="none"
+  />
+
+  <!-- ========================================= -->
+  <!-- Ember -->
+  <!-- ========================================= -->
+
+  <circle
+    cx="256"
+    cy="166"
+    r="26"
+    fill="#E3A646"
+  />
+
+  <!-- ========================================= -->
+  <!-- Flux -->
+  <!-- slightly flatter vertically -->
+  <!-- ========================================= -->
+
+  <path
+    d="
+      M 74 256
+      C 74 176, 184 176, 256 256
+      C 328 336, 438 336, 438 256
+      C 438 176, 328 176, 256 256
+      C 184 336, 74 336, 74 256
+    "
+    stroke="#A6B4C8"
+    stroke-width="38"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    fill="none"
+  />
 </svg>
